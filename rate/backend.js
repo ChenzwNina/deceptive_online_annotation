@@ -8,6 +8,9 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
+// Define a KV namespace for storing applicant data
+var kvNamespace = null;
+
 let normalHeader = {
     status: 200,
     statusText: 'OK',
@@ -51,19 +54,17 @@ let alreadyInuse = {
 
 export default {
     async fetch(request, env) {
-        const corsHeaders = {
-          'Access-Control-Allow-Origin': '*', // Or specify your origin
-          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type',
-        };
-    
-        if (request.method === 'OPTIONS') {
-            // Handle CORS preflight request
+      if (request.method === "OPTIONS") {
+            // Make sure to customize these headers to fit your needs.
             return new Response(null, {
-              status: 204,
-              headers: corsHeaders,
-            });
+                headers: {
+                    "Access-Control-Allow-Origin": request.headers.get('Origin'), // Adjust this to be more restrictive if needed
+                    "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS", // Include other methods your API needs
+                    "Access-Control-Allow-Headers": "Content-Type, Authorization", // Add other headers your API expects
+                },
+            })
         }
+        kvNamespace = env.rate
 
         normalHeader.headers["Access-Control-Allow-Origin"] = request.headers.get('Origin');
         NotAvailableHeader.headers["Access-Control-Allow-Origin"] = request.headers.get('Origin');
@@ -72,20 +73,17 @@ export default {
         const url = new URL(request.url);
         const path = url.pathname;
 
-        kvNamespace = env.annotation_new;
-
         if (path === "/upload") {
-            response = await handleUpload(request);
+            return handleUpload(request);
         } else if (path === "/getCompleted") {
-            response = await handleGetCompleted(request);
-        } else if (path === "/get") {
-            response = await handleGetComment(request);
-        } else if (path === "/put") {
-            response = await handlePutComment(request);
-        } else {
-            response = new Response("Not Found", { status: 404 });
+            return handleGet(request);
+        }else if (path === "/get") {
+            return handleGetComment(request);
+        }else if (path === "/put") {
+            return handlePutComment(request);
+        }else {
+            return new Response("Not Found", notFoundHeader);
         }
-      
     }
 }
 
@@ -108,17 +106,8 @@ async function handlePutComment(request) {
       "rater": rater,
       "value": value
     }));
-    
 
-    return new Response(JSON.stringify({ msg: 'Annotation uploaded successfully for screenshot', key }), {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': request.headers.get('Origin'),
-          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type'
-        }
-      });
-      
+    return new Response(JSON.stringify({ "msg": 'Annotation uploaded successfully for screenshot', key}), normalHeader);
 }
 
 async function handleGetComment(request) {
@@ -132,28 +121,10 @@ async function handleGetComment(request) {
 
     if(value == null) {
         console.log("No value found in KV for the given image index");
-        return new Response(JSON.stringify(value), {
-            status: 200,
-            headers: {
-              'Content-Type': 'application/json',
-              'Access-Control-Allow-Origin': request.headers.get('Origin'),
-              'Access-Control-Allow-Headers': 'Content-Type',
-              'Access-Control-Allow-Methods': 'GET, POST, OPTIONS'
-            }
-          });
-          
+        return new Response("", normalHeader);
     } else{
         console.log("Value found in KV for the given image index");
-        return new Response(JSON.stringify(value), {
-            status: 200,
-            headers: {
-              'Content-Type': 'application/json',
-              'Access-Control-Allow-Origin': request.headers.get('Origin'),
-              'Access-Control-Allow-Headers': 'Content-Type',
-              'Access-Control-Allow-Methods': 'GET, POST, OPTIONS'
-            }
-          });
-          
+        return new Response(JSON.stringify(value), normalHeader);
     }
 }
 
@@ -172,15 +143,8 @@ async function handleUpload(request) {
       "index": index,
       "rater": rater
     }));
-    
-    return new Response(JSON.stringify({ msg: 'Annotation progress saved for element', index }), {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': request.headers.get('Origin'),
-          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type'
-        }
-      });
+
+    return new Response(JSON.stringify({ "msg": 'Annotation progress saved for screenshot', index }), normalHeader);
 }
 
 async function handleGet(request) {
@@ -192,14 +156,5 @@ async function handleGet(request) {
     
     const value = await kvNamespace.list({ prefix: key+":" });
 
-    return new Response(JSON.stringify(value.keys), {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': request.headers.get('Origin'),
-          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type'
-        }
-      });
-      
+    return new Response(JSON.stringify(value.keys), normalHeader);
 }
