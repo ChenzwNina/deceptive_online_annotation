@@ -8,10 +8,6 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
-kvNamespace = env.annotation_new;
-
-main = "src/index.js"
-
 let normalHeader = {
     status: 200,
     statusText: 'OK',
@@ -55,17 +51,19 @@ let alreadyInuse = {
 
 export default {
     async fetch(request, env) {
-        if (request.method === "OPTIONS") {
+        const corsHeaders = {
+          'Access-Control-Allow-Origin': '*', // Or specify your origin
+          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type',
+        };
+    
+        if (request.method === 'OPTIONS') {
+            // Handle CORS preflight request
             return new Response(null, {
               status: 204,
-              headers: {
-                "Access-Control-Allow-Origin": request.headers.get('Origin') || '*',
-                "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS",
-                "Access-Control-Allow-Headers": "Content-Type, Authorization",
-                "Access-Control-Max-Age": "86400"  // Optional: cache preflight
-              },
+              headers: corsHeaders,
             });
-          }
+        }
 
         normalHeader.headers["Access-Control-Allow-Origin"] = request.headers.get('Origin');
         NotAvailableHeader.headers["Access-Control-Allow-Origin"] = request.headers.get('Origin');
@@ -74,17 +72,20 @@ export default {
         const url = new URL(request.url);
         const path = url.pathname;
 
+        kvNamespace = env.annotation_new;
+
         if (path === "/upload") {
-            return handleUpload(request);
+            response = await handleUpload(request);
         } else if (path === "/getCompleted") {
-            return handleGet(request);
-        }else if (path === "/get") {
-            return handleGetComment(request);
-        }else if (path === "/put") {
-            return handlePutComment(request);
-        }else {
-            return new Response("Not Found", notFoundHeader);
+            response = await handleGetCompleted(request);
+        } else if (path === "/get") {
+            response = await handleGetComment(request);
+        } else if (path === "/put") {
+            response = await handlePutComment(request);
+        } else {
+            response = new Response("Not Found", { status: 404 });
         }
+      
     }
 }
 
