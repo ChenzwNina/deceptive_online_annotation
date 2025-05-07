@@ -108,8 +108,17 @@ async function handlePutComment(request) {
       "rater": rater,
       "value": value
     }));
+    
 
-    return new Response(JSON.stringify({ "msg": 'Annotation uploaded successfully for screenshot', key}), normalHeader);
+    return new Response(JSON.stringify({ msg: 'Annotation uploaded successfully for screenshot', key }), {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': request.headers.get('Origin'),
+          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type'
+        }
+      });
+      
 }
 
 async function handleGetComment(request) {
@@ -123,10 +132,28 @@ async function handleGetComment(request) {
 
     if(value == null) {
         console.log("No value found in KV for the given image index");
-        return new Response("", normalHeader);
+        return new Response(JSON.stringify(value), {
+            status: 200,
+            headers: {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': request.headers.get('Origin'),
+              'Access-Control-Allow-Headers': 'Content-Type',
+              'Access-Control-Allow-Methods': 'GET, POST, OPTIONS'
+            }
+          });
+          
     } else{
         console.log("Value found in KV for the given image index");
-        return new Response(JSON.stringify(value), normalHeader);
+        return new Response(JSON.stringify(value), {
+            status: 200,
+            headers: {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': request.headers.get('Origin'),
+              'Access-Control-Allow-Headers': 'Content-Type',
+              'Access-Control-Allow-Methods': 'GET, POST, OPTIONS'
+            }
+          });
+          
     }
 }
 
@@ -145,8 +172,15 @@ async function handleUpload(request) {
       "index": index,
       "rater": rater
     }));
-
-    return new Response(JSON.stringify({ "msg": 'Annotation progress saved for element', index }), normalHeader);
+    
+    return new Response(JSON.stringify({ msg: 'Annotation progress saved for element', index }), {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': request.headers.get('Origin'),
+          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type'
+        }
+      });
 }
 
 async function handleGet(request) {
@@ -158,5 +192,14 @@ async function handleGet(request) {
     
     const value = await kvNamespace.list({ prefix: key+":" });
 
-    return new Response(JSON.stringify(value.keys), normalHeader);
+    return new Response(JSON.stringify(value.keys), {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': request.headers.get('Origin'),
+          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type'
+        }
+      });
+      
 }
