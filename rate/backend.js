@@ -56,16 +56,17 @@ let alreadyInuse = {
 
 export default {
     async fetch(request, env) {
-      if (request.method === "OPTIONS") {
-            // Make sure to customize these headers to fit your needs.
+        if (request.method === "OPTIONS") {
             return new Response(null, {
-                headers: {
-                    "Access-Control-Allow-Origin": request.headers.get('Origin'), // Adjust this to be more restrictive if needed
-                    "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS", // Include other methods your API needs
-                    "Access-Control-Allow-Headers": "Content-Type, Authorization", // Add other headers your API expects
-                },
-            })
-        }
+              status: 204,
+              headers: {
+                "Access-Control-Allow-Origin": request.headers.get('Origin') || '*',
+                "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type, Authorization",
+                "Access-Control-Max-Age": "86400"  // Optional: cache preflight
+              },
+            });
+          }
         kvNamespace = env.annotation_new
 
         normalHeader.headers["Access-Control-Allow-Origin"] = request.headers.get('Origin');
