@@ -363,8 +363,8 @@
         }
 
 
-        async function uploadData() {
-            const data = collectData();
+        async function uploadData(summaryLabels) {
+            const data = collectData(summaryLabels);
             Toast('Uploading data...', 1000);
             let myuuid = crypto.randomUUID();
             const response = await fetch('https://rate.chenziwei0499.workers.dev/upload', {
@@ -380,6 +380,7 @@
             });
             // Toast(JSON.stringify(await response.json()), 1000);
 
+            console.log("summmary label2", summaryLabels)
             const response1 = await fetch('https://rate.chenziwei0499.workers.dev/put', {
                 method: 'POST',
                 headers: {
