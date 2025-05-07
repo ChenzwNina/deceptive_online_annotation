@@ -16,6 +16,7 @@
         .container {
             display: flex; /* Use Flexbox for layout */
             gap: 20px; /* Adds 20px space between columns */
+            padding-left: 20px;
             padding-right: 20px;
             justify-content: center; /* Center the columns horizontally */
         }
@@ -349,10 +350,11 @@
             // Save deceptive design categories and explanation text
             const selectedValues = Array.from(tree.selectedItems).map(item => item.value);
             const explanation = document.getElementById('explanation-text').value;
+            return [selectedValues, explanation];
         }
 
 
-        async function uploadData() {
+        async function uploadData(selectedValues) {
             const data = collectData();
             Toast('Uploading data...', 1000);
             let myuuid = crypto.randomUUID();
@@ -378,8 +380,8 @@
                     key: getQueryParameter('videoIndex') + getQueryParameter('user'),
                     rater: getQueryParameter('user'),
                     value: {
-                        dark_pattern_type: selectedValues,
-                        explanation_text: explanation
+                        dark_pattern_type: data[0],
+                        explanation_text: data[1]
                     }
                 })
             });
