@@ -11,6 +11,8 @@
 // Define a KV namespace for storing applicant data
 var kvNamespace = null;
 
+main = "src/index.js"
+
 let normalHeader = {
     status: 200,
     statusText: 'OK',
@@ -64,7 +66,7 @@ export default {
                 },
             })
         }
-        kvNamespace = env.rate
+        kvNamespace = env.annotation_new
 
         normalHeader.headers["Access-Control-Allow-Origin"] = request.headers.get('Origin');
         NotAvailableHeader.headers["Access-Control-Allow-Origin"] = request.headers.get('Origin');

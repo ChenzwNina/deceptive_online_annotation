@@ -16,5 +16,5 @@ account_id = "0a54c51ce4290ec2bb59f10871e4e25d"
 workers_dev = true
 
 [[kv_namespaces]]
-binding = "rate"
-id = "a978faa685b34f949724a6222be6f37b"
+binding = "annotation_new"
+id = "a29b1d6300b143eab874c0918fec299f"
