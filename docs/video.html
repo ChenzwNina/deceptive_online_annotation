@@ -12,19 +12,11 @@
         border-top: 2px dashed #bbb;
         }
 
-        .clickable {
-            text-decoration: none; /* Removes underline from the link */
-            color: rgb(30, 108, 226); /* Sets text color */
-        }
-
-        .clickable:hover {
-            color: #6aa7e8; /* Button hover effect */
-        }
-
         /* Clear floats after the columns */
         .container {
             display: flex; /* Use Flexbox for layout */
             gap: 20px; /* Adds 20px space between columns */
+            padding-right: 20px;
             justify-content: center; /* Center the columns horizontally */
         }
 
@@ -43,26 +35,10 @@
             height: auto; /* Ensure the image scales properly */
         }
 
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            border-radius: 4px; /* Rounded corners for buttons */
-            background-color: #007bff; /* Button background color */
-            color: white; /* Button text color */
-            cursor: pointer;
+        sl-button.primary::part(base) {
+            background-color: #d7e9ff;
         }
 
-        button:hover {
-            background-color: #0056b3; /* Button hover effect */
-        }
-
-        .inline-buttons {
-            display: flex;
-            justify-content: left;  
-            gap: 10px; /* Add spacing between the buttons */
-            margin-top: 20px; /* Add some spacing above the buttons */
-        }
         h1 {
             font-size: var(--sl-font-size-x-large);
             font-family: var(--sl-font-sans);
@@ -81,6 +57,10 @@
             box-shadow: var(--sl-shadow-large);
         }
 
+        .transition_button{
+            width: 130px;
+        }
+
 
 
     </style>
@@ -94,17 +74,20 @@
             </div>
         </div>
         <div class="column">
-            <h1>Dark Pattern Category Selection</h1>
-            <a href="https://docs.google.com/document/d/1N6PxylN0ZMmg9i23Z0Zsmfo3J6Kj6oztqCK-69QNhbI/edit?usp=sharing" class="clickable">
-                View Rubric and Reference Paper
-            </a>
+            <h1>Deceptive Design Category Selection</h1>
+            <sl-button variant="default" size="small" a href="">
+                <sl-icon slot="prefix" name="arrow-up-right-square"></sl-icon>
+                View Taxonomoy
+            </sl-button>
             <br/>
+
+            <sl-divider></sl-divider>
             
             <div class="deceptive-design-group">
                 <br/>
 
                 <sl-dropdown>
-                    <sl-button slot="trigger" caret>Select Deceptive Designs</sl-button>
+                    <sl-button slot="trigger" class="primary" caret>Select Deceptive Designs</sl-button>
                     <sl-tree selectable selection="multiple" class="deceptive-selectable">
                         <sl-tree-item value="obstruction" label="Obstruction">
                             Obstruction
@@ -264,7 +247,15 @@
                 <br/>   
                 <sl-textarea rows="5" id="explanation-text" label="Which elements use deceptive designs? Provide one explanation per deceptive design, using a single line for each." help-text="Example: Visual Prominence - The 'Add to Cart' and 'Buy Now' action buttons use deceptive design. The 'Buy Now' button uses a much brighter color to draw more attention, making it an example of the 'Visual Prominence' deceptive design."></sl-textarea>
                 <br/>
-
+                <sl-divider></sl-divider>
+                <sl-button variant="default" id="prev-button" class="transition_button">
+                    <sl-icon slot="prefix" name="arrow-left"></sl-icon>
+                    Previous
+                </sl-button>
+                <sl-button variant="default" id="next-button" class="transition_button">
+                    <sl-icon slot="suffix" name="arrow-right"></sl-icon>
+                    Next
+                </sl-button>
             </div>
         </div>
     </div>
@@ -292,11 +283,6 @@
         async function createVideoScene(videoPair) {
             const scene = document.createElement('div');
 
-            // scene.innerHTML = `
-            // <div>
-            //     <iframe src="https://www.w3schools.com/html/html_iframe.asp" width="100%" height="600"></iframe>
-            // </div>
-            // `;
             scene.innerHTML = `
             <div>
                 <h2><Widget Image</h2>
