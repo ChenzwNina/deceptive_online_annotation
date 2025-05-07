@@ -227,24 +227,7 @@
                 </sl-dropdown>
                 
                 <p id="selection-log" style="margin-top: 1rem;">Selected: (none)</p>
-                
-                <script>
-                    const tree = document.querySelector('.deceptive-selectable');
-                    const log = document.getElementById('selection-log');
-                  
-                    tree.addEventListener('sl-selection-change', event => {
-                      const selectedItems = Array.from(event.detail.selection);
-                  
-                      const getLabel = (item) => {
-                        // Fallback to visible text if label is undefined
-                        return item.label || item.childNodes[0]?.textContent.trim() || '(Unnamed)';
-                      };
-                  
-                      const labels = [...new Set(selectedItems.map(getLabel))];
-                  
-                      log.textContent = `Selected: ${labels.length ? labels.join(', ') : '(none)'}`;
-                    });
-                </script>
+            
 
                 <br/>   
                 <sl-textarea rows="5" id="explanation-text" label="Which elements use deceptive designs? Provide one explanation per deceptive design, using a single line for each." help-text="Example: Visual Prominence - The 'Add to Cart' and 'Buy Now' action buttons use deceptive design. The 'Buy Now' button uses a much brighter color to draw more attention, making it an example of the 'Visual Prominence' deceptive design."></sl-textarea>
@@ -264,6 +247,24 @@
 
 
     <script>
+
+        // Tree selection logic
+        const tree = document.querySelector('.deceptive-selectable');
+        const log = document.getElementById('selection-log');
+        
+        tree.addEventListener('sl-selection-change', event => {
+            const selectedItems = Array.from(event.detail.selection);
+        
+            const getLabel = (item) => {
+            // Fallback to visible text if label is undefined
+            return item.label || item.childNodes[0]?.textContent.trim() || '(Unnamed)';
+            };
+        
+            const labels = [...new Set(selectedItems.map(getLabel))];
+            const summaryLabels = `Selected: ${labels.length ? labels.join(', ') : '(none)'}`;
+        
+            log.textContent = summaryLabels;
+        });
 
 
         async function fetchVideoData() {
@@ -344,14 +345,13 @@
         // Initialize by showing the scene based on the URL parameter
         showScene();
 
-        function collectData() {
+        function collectData(summaryLabels) {
             const urlParams = new URLSearchParams(window.location.search);
             const videoIndex = urlParams.get('videoIndex');
 
             // Save deceptive design categories and explanation text
-            const selectedValues = Array.from(tree.selectedItems).map(item => item.value);
             const explanation = document.getElementById('explanation-text').value;
-            return [selectedValues, explanation];
+            return [summaryLabels, explanation];
         }
 
 
