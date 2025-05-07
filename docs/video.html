@@ -300,9 +300,19 @@
                 })
             });
 
-            console.log("Response style" + response)
-            const result = await response.json();
-            const savedData = result.value || {};
+            const data_text = await response.text();
+            console.log("Response style" + data_text)
+
+            if (!data_text || data_text.trim() === "") {
+                console.log("Empty response body.");
+                return scene;
+            }
+
+            const data = JSON.parse(JSON.parse(data_text));
+            console.log("Raw Response Body:", data);
+
+            const result = await response.text();
+            const savedData = data.value || {};
             const selectedValues = savedData.dark_pattern_type || [];
             const explanationText = savedData.explanation_text || '';
         }
