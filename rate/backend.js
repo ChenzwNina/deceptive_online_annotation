@@ -8,7 +8,6 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
-// Define a KV namespace for storing applicant data
 var kvNamespace = null;
 
 main = "src/index.js"
