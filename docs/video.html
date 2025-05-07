@@ -346,7 +346,7 @@
         // Initialize by showing the scene based on the URL parameter
         showScene();
 
-        function collectData() {
+        function collectData(summaryLabels) {
             console.log("summary labels in collectData", summaryLabels)
             const urlParams = new URLSearchParams(window.location.search);
             const videoIndex = urlParams.get('videoIndex');
