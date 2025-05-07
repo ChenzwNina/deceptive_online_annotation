@@ -300,6 +300,7 @@
                 })
             });
 
+            console.log("Response style" + response)
             const result = await response.json();
             const savedData = result.value || {};
             const selectedValues = savedData.dark_pattern_type || [];
