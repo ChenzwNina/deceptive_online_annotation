@@ -8,7 +8,7 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
-var kvNamespace = null;
+kvNamespace = env.annotation_new;
 
 main = "src/index.js"
 
@@ -66,7 +66,6 @@ export default {
               },
             });
           }
-        kvNamespace = env.annotation_new
 
         normalHeader.headers["Access-Control-Allow-Origin"] = request.headers.get('Origin');
         NotAvailableHeader.headers["Access-Control-Allow-Origin"] = request.headers.get('Origin');
