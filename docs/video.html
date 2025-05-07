@@ -264,6 +264,7 @@
             const summaryLabels = `Selected: ${labels.length ? labels.join(', ') : '(none)'}`;
         
             log.textContent = summaryLabels;
+            console.log("summary labels", summaryLabels)
         });
 
 
@@ -345,17 +346,24 @@
         // Initialize by showing the scene based on the URL parameter
         showScene();
 
-        function collectData(summaryLabels) {
+        function collectData() {
+            console.log("summary labels in collectData", summaryLabels)
             const urlParams = new URLSearchParams(window.location.search);
             const videoIndex = urlParams.get('videoIndex');
 
+            const explanation_text = document.getElementById('explanation-text').value;
+
+            log.console("labels2", summaryLabels)
             // Save deceptive design categories and explanation text
-            const explanation = document.getElementById('explanation-text').value;
-            return [summaryLabels, explanation];
+            const data = {
+                dark_pattern_type: summaryLabels,
+                explanation: explanation_text
+            }
+            return data;
         }
 
 
-        async function uploadData(selectedValues) {
+        async function uploadData() {
             const data = collectData();
             Toast('Uploading data...', 1000);
             let myuuid = crypto.randomUUID();
@@ -380,11 +388,8 @@
                 body: JSON.stringify({
                     key: getQueryParameter('videoIndex') + getQueryParameter('user'),
                     rater: getQueryParameter('user'),
-                    value: {
-                        dark_pattern_type: data[0],
-                        explanation_text: data[1]
-                    }
-                })
+                    value: data
+                    })
             });
             await Toast(JSON.stringify(await response1.json()), 1000);
         }
