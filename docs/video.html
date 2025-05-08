@@ -265,7 +265,7 @@
             const summaryLabels = `Selected: ${labels.length ? labels.join(', ') : '(none)'}`;
         
             log.textContent = summaryLabels;
-            currentSummaryLabel = summaryLabels;
+            currentSummaryLabel = `${labels.length ? labels.join(', ') : '(none)'}`;
             console.log("summary labels", summaryLabels)
 
         });
@@ -307,21 +307,25 @@
                 })
             });
 
-            const data_text = await response.text();
-            console.log("Response style" + data_text)
+            // Get selected dark pattern types and input text
+            const type = response.value.dark_pattern_type;
+            const explanation = response.value.explanation;
+            
+            // Seperate items into array
+            const selectedTypes = data.value.dark_pattern_type
+            .split(',')
+            .map(type => type.trim());
 
-            if (!data_text || data_text.trim() === "") {
-                console.log("Empty response body.");
-                return scene;
-            }
+            // Get all sl-tree-items
+            const allItems = document.querySelectorAll('sl-tree-item');
 
-            const data = JSON.parse(JSON.parse(data_text));
-            console.log("Raw Response Body:", data);
+            // Clear all selections, then select matching items
+            allItems.forEach(item => {
+            item.selected = selectedTypes.includes(item.value);
+            });
 
-            const result = await response.text();
-            const savedData = data.value || {};
-            const selectedValues = savedData.dark_pattern_type || [];
-            const explanationText = savedData.explanation_text || '';
+            // Get text back to the textbox
+            document.getElementById('explanation-text').value = explanationText;
         }
         
         async function showScene() {
