@@ -11,7 +11,7 @@
         hr.dashed {
         border-top: 2px dashed #bbb;
         }
-        
+
 
         /* Clear floats after the columns */
         .container {
@@ -327,11 +327,16 @@
             console.log("type", selectedValues)
             // Select matching sl-tree-item elements
             const allItems = document.querySelectorAll('sl-tree-item');
-
-            allItems.forEach(item => {
-            item.selected = selectedValues.includes(item.label);
-            });
             
+            allItems.forEach(item => {
+                const label = item.getAttribute('label');
+                if (selectedValues.includes(label)) {
+                    item.selected = true;
+                    console.log("Selected:", label);
+                }
+            });
+
+
             // Get text back to the textbox
             document.getElementById('explanation-text').value = explanation;
         }
@@ -347,6 +352,7 @@
                 console.log("Video Data[index]: "+ JSON.stringify(videoData[videoIndex]));
                 const scene = await createVideoScene(videoData[videoIndex]);
                 videoSource = videoData[videoIndex];
+                console.log("scene:", scene)
                 videoScenes.appendChild(scene);
             } else {
                 videoScenes.innerHTML = `
