@@ -316,7 +316,6 @@
             // Get selected dark pattern types and input text
             const type = parsed.value.dark_pattern_type;
             const explanation = parsed.value.explanation;
-            console.log("type", type)
             console.log("explanation", explanation)
 
             const selectedValues = type
@@ -324,15 +323,16 @@
                 .split(',')
                 .map(t => t.trim());           // clean each item
 
+            console.log("type", selectedValues)
             // Select matching sl-tree-item elements
             const allItems = document.querySelectorAll('sl-tree-item');
 
             allItems.forEach(item => {
-            item.selected = selectedValues.includes(item.value);
+            item.selected = selectedValues.includes(item.label);
             });
             
             // Get text back to the textbox
-            document.getElementById('explanation-text').value = explanationText;
+            document.getElementById('explanation-text').value = explanation;
         }
         
         async function showScene() {
