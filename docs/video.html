@@ -298,20 +298,39 @@
             </div>
             `;
 
+            // const response = await fetch('https://rate.chenziwei0499.workers.dev/get', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify({
+            //         key: getQueryParameter('videoIndex') + getQueryParameter('user')
+            //     })
+            // });
+
+            // const data = await response.json();
+
             const response = await fetch('https://rate.chenziwei0499.workers.dev/get', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    key: getQueryParameter('videoIndex') + getQueryParameter('user')
-                })
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ key: getQueryParameter('videoIndex') + getQueryParameter('user') })
             });
 
-            const data = await response.json();
+            let data = {};
+            try {
+            const text = await response.text();
+            if (text.trim()) {
+                data = JSON.parse(text);
+            } else {
+                console.warn('Empty response from /get endpoint');
+                return scene; // Skip processing this entry
+            }
+            } catch (err) {
+            console.error('Failed to parse JSON:', err);
+            return scene;
+            }
 
-            // Parse data
-            const parsed = JSON.parse(data);  // This is now a real object
+            const parsed = data; 
             console.log("parsed", parsed)
 
             // Get selected dark pattern types and input text
