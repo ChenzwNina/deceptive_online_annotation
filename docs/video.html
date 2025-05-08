@@ -334,9 +334,9 @@
             console.log("parsed", parsed)
 
             // If there is no value, skip this scene
-            if (!parsed.value || !parsed.value.dark_pattern_type) {
+            if (!parsed.value || typeof parsed.value.dark_pattern_type !== 'string') {
                 console.warn("Missing or malformed data:", parsed);
-                return scene; 
+                return scene;
             }
 
             // Get selected dark pattern types and input text
