@@ -327,27 +327,28 @@
             console.log("type", selectedValues)
 
             // ensure custom element is defined
-            await customElements.whenDefined('sl-tree-item'); 
+            await customElements.whenDefined('sl-tree-item');
             // Select matching sl-tree-item elements
             const allItems = document.querySelectorAll('sl-tree-item');
             
-            let selected_list = '';  // Start with an empty string
-
+            let selected_list = '';
             allItems.forEach(item => {
                 const label = item.getAttribute('label');
                 if (selectedValues.includes(label)) {
                     item.selected = true;
                     console.log("Selected:", label);
-                    selected_list += (selected_list ? ', ' : '') + label;
+                    selected_list += (selected_list ? ',' : '') + label
+        
                 }
             });
 
 
+
             // Get text back to the textbox
             document.getElementById('explanation-text').value = explanation;
-
-            // Update selected text
-            document.getElementById('selection-log').value = `Selected: ${selected_list}`;
+            summaryLabels = `Selected:${selected_list}`;
+            console.log("selected_list:", summaryLabels)
+            log.textContent = summaryLabels
 
             return scene;
         }
