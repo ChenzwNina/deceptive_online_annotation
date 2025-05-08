@@ -366,6 +366,7 @@
 
 
         async function uploadData() {
+            const data = collectData();
             Toast('Uploading data...', 1000);
             let myuuid = crypto.randomUUID();
             const response = await fetch('https://rate.chenziwei0499.workers.dev/upload', {
