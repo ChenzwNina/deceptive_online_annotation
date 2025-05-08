@@ -333,6 +333,7 @@
             const parsed = data; 
             console.log("parsed", parsed)
 
+            console.log("dark_pattern_type", parsed.value.dark_pattern_type)
             // If there is no value, skip this scene
             if (!parsed.value || typeof parsed.value.dark_pattern_type !== 'string') {
                 console.warn("Missing or malformed data:", parsed);
