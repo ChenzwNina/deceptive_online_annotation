@@ -326,7 +326,8 @@
 
             console.log("type", selectedValues)
 
-            await customElements.whenDefined('sl-tree-item'); // ensure custom element is defined
+            // ensure custom element is defined
+            await customElements.whenDefined('sl-tree-item'); 
             // Select matching sl-tree-item elements
             const allItems = document.querySelectorAll('sl-tree-item');
             
