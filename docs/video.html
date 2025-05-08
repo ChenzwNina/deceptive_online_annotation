@@ -307,15 +307,17 @@
                 })
             });
 
+            const data = await response.json();
 
-            console.log("response", response)
-            console.log("response json", response.json())
-            console.log("response text", response.text())
-            console.log("response value", response.value)
+            // Parse data
+            const parsed = JSON.parse(data);  // This is now a real object
+            console.log("parsed", parsed)
 
             // Get selected dark pattern types and input text
-            const type = response.value.dark_pattern_type;
-            const explanation = response.value.explanation;
+            const type = parsed.value.dark_pattern_type;
+            const explanation = parsed.value.explanation;
+            console.log("type", type)
+            console.log("explanation", explanation)
             
             // Seperate items into array
             const selectedTypes = data.value.dark_pattern_type
