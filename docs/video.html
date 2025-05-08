@@ -333,6 +333,11 @@
             const parsed = data; 
             console.log("parsed", parsed)
 
+            if (!parsed.value || !parsed.value.dark_pattern_type) {
+                console.warn("Missing or malformed data:", parsed);
+                return scene; // Skip this scene
+            }
+
             // Get selected dark pattern types and input text
             const type = parsed.value.dark_pattern_type;
             const explanation = parsed.value.explanation;
