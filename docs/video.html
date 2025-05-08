@@ -334,27 +334,26 @@
 
             console.log("parsed", parsed)
             console.log("parsed type", typeof parsed)
-            console.log("parsed value", json.loads(parsed)["value"])
-            console.log("parsed value", json.loads(parsed)["value"]["dark_pattern_type"])
+            parsed_dict = json.loads(parsed)
+            dark_pattern_type = parsed_dict["value"]["dark_pattern_type"]
+            explanation = parsed_dict["value"]["explanation"]
+            console.log("explanation", explanation)
+            console.log("dark_pattern_typ", dark_pattern_type)
 
-            console.log("dark_pattern_type", parsed.value.dark_pattern_type)
+            // Get text back to the textbox
+            document.getElementById('explanation-text').value = explanation;
+
             // If there is no value, skip this scene
-            if (!parsed.value || typeof parsed.value.dark_pattern_type !== 'string') {
+            if (dark_pattern_type = "") {
                 console.warn("Missing or malformed data:", parsed);
                 return scene;
             }
 
-            // Get selected dark pattern types and input text
-            const type = parsed.value.dark_pattern_type;
-            const explanation = parsed.value.explanation;
-            console.log("explanation", explanation)
-
-            const selectedValues = type
-                .replace(/^Selected:\s*/, '')  // remove prefix
+            const selectedValues = dark_pattern_type 
                 .split(',')
                 .map(t => t.trim());           // clean each item
 
-            console.log("type", selectedValues)
+            console.log("Array", selectedValues)
 
             // ensure custom element is defined
             await customElements.whenDefined('sl-tree-item');
