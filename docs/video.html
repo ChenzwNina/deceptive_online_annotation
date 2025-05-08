@@ -331,17 +331,21 @@
             // Select matching sl-tree-item elements
             const allItems = document.querySelectorAll('sl-tree-item');
             
+            let selected_list = '';  // Start with an empty string
+
             allItems.forEach(item => {
                 const label = item.getAttribute('label');
                 if (selectedValues.includes(label)) {
                     item.selected = true;
                     console.log("Selected:", label);
+                    selected_list += (selected_list ? ', ' : '') + label;
                 }
             });
 
 
             // Get text back to the textbox
             document.getElementById('explanation-text').value = explanation;
+            document.getElementById('selection-log').value = `Selected: ${selected_list}`;
 
             return scene;
         }
