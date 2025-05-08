@@ -339,6 +339,11 @@
                 }
             });
 
+            // Fix log and label tracking after selection restoration
+            const selectedLabels = selectedValues.join(', ');
+            const summaryLabels = `Selected: ${selectedLabels || '(none)'}`;
+            log.textContent = summaryLabels;
+            currentSummaryLabel = selectedLabels || '(none)';
 
             // Get text back to the textbox
             document.getElementById('explanation-text').value = explanation;
