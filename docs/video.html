@@ -334,13 +334,17 @@
 
             console.log("parsed", parsed)
             console.log("parsed type", typeof parsed)
-            
+
 
             parsed_dict = JSON.parse(parsed)
+
+            // Get dark pattern type and explanation text
             dark_pattern_type = parsed_dict.value.dark_pattern_type
             explanation = parsed_dict.value.explanation
+
             console.log("explanation", explanation)
-            console.log("dark_pattern_typ", dark_pattern_type)
+            console.log("dark_pattern_type", dark_pattern_type)
+            console.log("dark_pattern_type type", typeof dark_pattern_type)
 
             // Get text back to the textbox
             document.getElementById('explanation-text').value = explanation;
