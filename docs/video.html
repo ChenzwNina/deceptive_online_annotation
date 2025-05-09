@@ -353,18 +353,19 @@
                 return scene;
             }
 
-            const selectedValues = dark_pattern_type.split(',')          // clean each item
+            const selectedValues = dark_pattern_type.split(',').map(t => t.trim());       // clean each item
 
             console.log("Array", selectedValues)
 
             // ensure custom element is defined
             await customElements.whenDefined('sl-tree-item');
+            
             // Select matching sl-tree-item elements
             const allItems = document.querySelectorAll('sl-tree-item');
             
             allItems.forEach(item => {
                 const label = item.getAttribute('label');
-                if (selectedValues.includes(label)) {
+                if (selectedValues.includes(label.trim())) {
                     item.selected = true;
                     console.log("Selected:", label);
                 }
