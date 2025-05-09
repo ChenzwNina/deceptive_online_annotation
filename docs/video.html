@@ -353,9 +353,11 @@
                 return scene;
             }
 
-            const selectedValues = dark_pattern_type.split(',').map(t => t.trim());       // clean each item
+            const selectedValues = String(dark_pattern_type.split(',').map(t => t.trim()));       // clean each item
 
             console.log("Array type", typeof selectedValues)
+            
+            console.log("isArray?", Array.isArray(selectedValues));
             console.log("Array", selectedValues)
 
             // ensure custom element is defined
